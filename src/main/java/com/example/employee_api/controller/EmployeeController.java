@@ -56,8 +56,8 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee) {
-        Employee createdEmployee = employeeService.addEmployee(employee);
+    public ResponseEntity<Employee> addEmployee(@RequestBody List<Object> changeValue) {
+        Employee createdEmployee = employeeService.addEmployee(changeValue);
         return ResponseEntity.status(201).body(createdEmployee);
     }
 }

@@ -11,5 +11,5 @@ public interface EmployeeService {
     List<Employee> getEmployeeByAttr(String searchAttr, String employeeValue);
     boolean deleteEmployeeBySsn(String employeeSsn);
     Employee updateEmployeeBySsn(String employeeSsn, Map<String, Object> updateValue);
-    Employee addEmployee(Employee employee);
+    Employee addEmployee(List<Object> changeValue);
 }

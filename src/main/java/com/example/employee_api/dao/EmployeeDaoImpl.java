@@ -128,7 +128,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
         StringBuilder query = new StringBuilder("UPDATE EMPLOYEE SET ");
         List<Object> params = new ArrayList<>();
 
-        Employee employee = new Employee();
+        Timestamp currentTimestamp = Timestamp.valueOf(LocalDateTime.now());
+        changeValue.put("modified", currentTimestamp);
 
         for (Map.Entry<String, Object> entry: changeValue.entrySet()) {
             query.append(entry.getKey()).append(" = ?, ");
@@ -152,8 +153,27 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public Employee addEmployee(Employee employee) {
+    public Employee addEmployee(List<Object> changeValue) {
+        if (changeValue.size() < 10) {
+            throw new IllegalArgumentException("Invalid changeValue list");
+        }
 
-        return employee;
+        String query = "INSERT INTO EMPLOYEE (Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dno, created, modified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        Timestamp currentTimestamp = Timestamp.valueOf(LocalDateTime.now());
+        changeValue.add(currentTimestamp);
+        changeValue.add(currentTimestamp);
+
+        try {
+            int result = dbManager.executeUpdate(query, changeValue.toArray());
+            if (result > 0) {
+                return getEmployeeBySsn(changeValue.get(3).toString());
+            }
+            else return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 }
