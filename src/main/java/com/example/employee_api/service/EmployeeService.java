@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface EmployeeService {
     List<Employee> getAllEmployees();
-    Employee getEmployeeBySsn(String employeeSsn);
+    List<Employee> getEmployeeByAttr(String searchAttr, String employeeValue);
     boolean deleteEmployeeBySsn(String employeeSsn);
     Employee updateEmployeeBySsn(String employeeSsn, Employee employee);
     Employee addEmployee(Employee employee);

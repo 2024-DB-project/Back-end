@@ -54,10 +54,35 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public Employee getEmployeeBySsn(String employeeSsn) {
-        Employee employee = null;
+    public List<Employee> getEmployeeByAttr(String searchAttr, String employeeValue) {
+        List<Employee> employees = new ArrayList<>();
+        String query = "SELECT * FROM EMPLOYEE WHERE " + searchAttr + " = ?";
+
+        try {
+            List<Map<String, Object>> results = dbManager.executeQuery(query, employeeValue);
+
+            for (Map<String, Object> row : results) {
+                Employee employee = new Employee();
+                employee.setFname((String) row.get("Fname"));
+                employee.setMinit((String) row.get("Minit"));
+                employee.setLname((String) row.get("Lname"));
+                employee.setSsn((String) row.get("Ssn"));
+                employee.setBdate((Date) row.get("Bdate"));
+                employee.setAddress((String) row.get("Address"));
+                employee.setSex((String) row.get("Sex"));
+                employee.setSalary(((BigDecimal) row.get("Salary")).doubleValue());
+                employee.setSuperSsn((String) row.get("Super_ssn"));
+                employee.setDno((int) row.get("Dno"));
+                employee.setCreated((Timestamp) row.get("created"));
+                employee.setModified((Timestamp) row.get("modified"));
+
+                employees.add(employee);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         // 세부 구현 필요
-        return employee;
+        return employees;
     }
 
     @Override

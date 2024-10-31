@@ -21,15 +21,17 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getAllemployee() {
+    public ResponseEntity<List<Employee>> getAllEmployees() {
         List<Employee> employees = employeeService.getAllEmployees();
         return ResponseEntity.ok(employees);
     }
 
-    @GetMapping("/{employee_ssn}")
-    public ResponseEntity<Employee> getEmployeeBySsn(@PathVariable("employee_ssn") String employeeSsn) {
-        Employee employee = employeeService.getEmployeeBySsn(employeeSsn);
-        return employee != null ? ResponseEntity.ok(employee) : ResponseEntity.notFound().build();
+    @GetMapping("/search")
+    public ResponseEntity<List<Employee>> getEmployeeByAttr(
+            @RequestParam(value = "search_attr") String searchAttr,
+            @RequestParam(value = "employee_value") String employeeValue) {
+        List<Employee> employees = employeeService.getEmployeeByAttr(searchAttr, employeeValue);
+        return employees != null ? ResponseEntity.ok(employees) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{employee_ssn}")

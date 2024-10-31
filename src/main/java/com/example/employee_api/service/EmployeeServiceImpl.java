@@ -23,8 +23,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public Employee getEmployeeBySsn(String employeeSsn) {
-        return employeeDao.getEmployeeBySsn(employeeSsn);
+    public List<Employee> getEmployeeByAttr(String searchAttr, String employeeValue) {
+        return employeeDao.getEmployeeByAttr(searchAttr, employeeValue);
     }
 
     @Override
