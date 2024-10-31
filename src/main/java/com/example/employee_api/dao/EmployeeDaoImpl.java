@@ -100,7 +100,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public Employee updateEmployeeBySsn(String employeeSsn, Employee employee) {
-        String query = "UPDATE EMPLOYEE SET"
+//        String query = "UPDATE EMPLOYEE SET"
         return employee;
     }
 
