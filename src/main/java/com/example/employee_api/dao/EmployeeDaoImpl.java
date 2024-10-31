@@ -87,13 +87,20 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public boolean deleteEmployeeBySsn(String employeeSsn) {
-        // 세부 구현 필요
-        return false;
+        String query = "DELETE FROM EMPLOYEE WHERE Ssn = ?";
+
+        try {
+            int result = dbManager.executeUpdate(query, employeeSsn);
+            return result > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public Employee updateEmployeeBySsn(String employeeSsn, Employee employee) {
-        // 세부 구현 필요
+        String query = "UPDATE EMPLOYEE SET"
         return employee;
     }
 
