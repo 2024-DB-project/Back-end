@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -24,6 +25,12 @@ public class EmployeeController {
     public ResponseEntity<List<Employee>> getAllEmployees() {
         List<Employee> employees = employeeService.getAllEmployees();
         return ResponseEntity.ok(employees);
+    }
+
+    @GetMapping("/{employee_ssn}")
+    public ResponseEntity<Employee> getEmployeeByAttr(@PathVariable("employee_ssn") String employeeSsn) {
+        Employee employee = employeeService.getEmployeeBySsn(employeeSsn);
+        return employee != null ? ResponseEntity.ok(employee) : ResponseEntity.notFound().build();
     }
 
     @GetMapping("/search")
@@ -43,8 +50,8 @@ public class EmployeeController {
     @PutMapping("/{employee_ssn}")
     public ResponseEntity<Employee> updateEmployeeBySsn(
             @PathVariable("employee_ssn") String employeeSsn,
-            @RequestBody Employee employee) {
-        Employee updatedEmployee = employeeService.updateEmployeeBySsn(employeeSsn, employee);
+            @RequestBody Map<String, Object> changeValue) {
+        Employee updatedEmployee = employeeService.updateEmployeeBySsn(employeeSsn, changeValue);
         return updatedEmployee != null ? ResponseEntity.ok(updatedEmployee) : ResponseEntity.notFound().build();
     }
 

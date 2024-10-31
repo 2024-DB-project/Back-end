@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
@@ -22,6 +23,9 @@ public class EmployeeServiceImpl implements EmployeeService{
         return employeeDao.getAllEmployees();
     }
 
+    public Employee getEmployeeBySsn(String employeeSsn) {
+        return employeeDao.getEmployeeBySsn(employeeSsn);
+    }
     @Override
     public List<Employee> getEmployeeByAttr(String searchAttr, String employeeValue) {
         return employeeDao.getEmployeeByAttr(searchAttr, employeeValue);
@@ -33,8 +37,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public Employee updateEmployeeBySsn(String employeeSsn, Employee employee) {
-        return employeeDao.updateEmployeeBySsn(employeeSsn, employee);
+    public Employee updateEmployeeBySsn(String employeeSsn, Map<String, Object> updateValue) {
+        return employeeDao.updateEmployeeBySsn(employeeSsn, updateValue);
     }
 
     @Override

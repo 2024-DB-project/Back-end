@@ -54,6 +54,32 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
+    public Employee getEmployeeBySsn(String employeeSsn) {
+        Employee employee = new Employee();
+        String query = "SELECT * FROM EMPLOYEE WHERE Ssn = ?";
+
+        try {
+            Map<String, Object> result = dbManager.executeQuery(query, employeeSsn).get(0);
+
+            employee.setFname((String) result.get("Fname"));
+            employee.setMinit((String) result.get("Minit"));
+            employee.setLname((String) result.get("Lname"));
+            employee.setSsn((String) result.get("Ssn"));
+            employee.setBdate((Date) result.get("Bdate"));
+            employee.setAddress((String) result.get("Address"));
+            employee.setSex((String) result.get("Sex"));
+            employee.setSalary(((BigDecimal) result.get("Salary")).doubleValue());
+            employee.setSuperSsn((String) result.get("Super_ssn"));
+            employee.setDno((int) result.get("Dno"));
+            employee.setCreated((Timestamp) result.get("created"));
+            employee.setModified((Timestamp) result.get("modified"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return employee;
+    }
+
+    @Override
     public List<Employee> getEmployeeByAttr(String searchAttr, String employeeValue) {
         List<Employee> employees = new ArrayList<>();
         String query = "SELECT * FROM EMPLOYEE WHERE " + searchAttr + " = ?";
@@ -81,7 +107,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        // 세부 구현 필요
         return employees;
     }
 
@@ -99,14 +124,36 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public Employee updateEmployeeBySsn(String employeeSsn, Employee employee) {
-//        String query = "UPDATE EMPLOYEE SET"
-        return employee;
+    public Employee updateEmployeeBySsn(String employeeSsn, Map<String, Object> changeValue) {
+        StringBuilder query = new StringBuilder("UPDATE EMPLOYEE SET ");
+        List<Object> params = new ArrayList<>();
+
+        Employee employee = new Employee();
+
+        for (Map.Entry<String, Object> entry: changeValue.entrySet()) {
+            query.append(entry.getKey()).append(" = ?, ");
+            params.add(entry.getValue());
+        }
+
+        query.setLength(query.length() -2);
+        query.append(" WHERE Ssn = ?");
+        params.add(employeeSsn);
+
+        try {
+            int result = dbManager.executeUpdate(query.toString(), params.toArray());
+            if (result > 0) {
+                return getEmployeeBySsn(employeeSsn);
+            }
+            else return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public Employee addEmployee(Employee employee) {
-        // 세부 구현 필요
+
         return employee;
     }
 }
