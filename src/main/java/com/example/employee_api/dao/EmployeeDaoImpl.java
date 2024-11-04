@@ -80,12 +80,19 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public List<Employee> getEmployeeByAttr(String searchAttr, String employeeValue) {
+    public List<Employee> getEmployeeByAttr(List<String> searchAttr, List<String> employeeValue) {
         List<Employee> employees = new ArrayList<>();
-        String query = "SELECT * FROM EMPLOYEE WHERE " + searchAttr + " = ?";
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM EMPLOYEE WHERE ");
+        for (int i = 0; i < searchAttr.size(); i++) {
+            queryBuilder.append(searchAttr.get(i)).append(" = ?");
+            if (i < searchAttr.size() - 1) {
+                queryBuilder.append(" AND ");
+            }
+        }
+        String query = queryBuilder.toString();
 
         try {
-            List<Map<String, Object>> results = dbManager.executeQuery(query, employeeValue);
+            List<Map<String, Object>> results = dbManager.executeQuery(query, employeeValue.toArray());
 
             for (Map<String, Object> row : results) {
                 Employee employee = new Employee();

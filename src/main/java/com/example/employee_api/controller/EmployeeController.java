@@ -34,9 +34,13 @@ public class EmployeeController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Employee>> getEmployeeByAttr(
-            @RequestParam(value = "search_attr") String searchAttr,
-            @RequestParam(value = "employee_value") String employeeValue) {
+    public ResponseEntity<?> getEmployeeByAttr(
+            @RequestParam(value = "search_attr") List<String> searchAttr,
+            @RequestParam(value = "employee_value") List<String> employeeValue) {
+
+        if (searchAttr.size() != employeeValue.size()) {
+            return ResponseEntity.badRequest().body("not matching parameters");
+        }
         List<Employee> employees = employeeService.getEmployeeByAttr(searchAttr, employeeValue);
         return employees != null ? ResponseEntity.ok(employees) : ResponseEntity.notFound().build();
     }
