@@ -28,7 +28,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{employee_ssn}")
-    public ResponseEntity<Employee> getEmployeeByAttr(@PathVariable("employee_ssn") String employeeSsn) {
+    public ResponseEntity<Employee> getEmployeeBySsn(@PathVariable("employee_ssn") String employeeSsn) {
         Employee employee = employeeService.getEmployeeBySsn(employeeSsn);
         return employee != null ? ResponseEntity.ok(employee) : ResponseEntity.notFound().build();
     }
