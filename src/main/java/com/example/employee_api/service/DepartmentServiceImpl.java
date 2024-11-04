@@ -3,18 +3,21 @@ package com.example.employee_api.service;
 import com.example.employee_api.dao.DepartmentDao;
 import com.example.employee_api.model.Department;
 import com.example.employee_api.model.Employee;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
-public class DepartmentService {
+public class DepartmentServiceImpl {
     
     private final DepartmentDao departmentDao;
+
+    @Autowired
+    public DepartmentServiceImpl(DepartmentDao departmentDao) {
+        this.departmentDao = departmentDao;
+    }
     
     // 01. 부서 추가
     public int createDepartment(String dname, int dnumber, String mgr_ssn, Date mgr_start_date) {

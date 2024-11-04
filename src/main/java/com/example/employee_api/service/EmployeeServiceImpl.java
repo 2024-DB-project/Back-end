@@ -1,7 +1,6 @@
 package com.example.employee_api.service;
 
 import com.example.employee_api.dao.EmployeeDao;
-import com.example.employee_api.dao.EmployeeDaoImpl;
 import com.example.employee_api.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
