@@ -2,20 +2,23 @@ package com.example.employee_api.controller;
 
 import com.example.employee_api.model.Department;
 import com.example.employee_api.model.Employee;
-import com.example.employee_api.service.DepartmentServiceImpl;
+import com.example.employee_api.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
 
-@Service
+@RestController
+@RequestMapping("/api/department")
 public class DepartmentController {
     
-    private final DepartmentServiceImpl departmentService;
+    private final DepartmentService departmentService;
 
     @Autowired
-    public DepartmentController(DepartmentServiceImpl departmentService) {
+    public DepartmentController(DepartmentService departmentService) {
         this.departmentService = departmentService;
     }
 
