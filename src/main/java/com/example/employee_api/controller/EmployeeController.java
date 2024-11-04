@@ -28,15 +28,19 @@ public class EmployeeController {
     }
 
     @GetMapping("/{employee_ssn}")
-    public ResponseEntity<Employee> getEmployeeByAttr(@PathVariable("employee_ssn") String employeeSsn) {
+    public ResponseEntity<Employee> getEmployeeBySsn(@PathVariable("employee_ssn") String employeeSsn) {
         Employee employee = employeeService.getEmployeeBySsn(employeeSsn);
         return employee != null ? ResponseEntity.ok(employee) : ResponseEntity.notFound().build();
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Employee>> getEmployeeByAttr(
-            @RequestParam(value = "search_attr") String searchAttr,
-            @RequestParam(value = "employee_value") String employeeValue) {
+    public ResponseEntity<?> getEmployeeByAttr(
+            @RequestParam(value = "search_attr") List<String> searchAttr,
+            @RequestParam(value = "employee_value") List<String> employeeValue) {
+
+        if (searchAttr.size() != employeeValue.size()) {
+            return ResponseEntity.badRequest().body("not matching parameters");
+        }
         List<Employee> employees = employeeService.getEmployeeByAttr(searchAttr, employeeValue);
         return employees != null ? ResponseEntity.ok(employees) : ResponseEntity.notFound().build();
     }
