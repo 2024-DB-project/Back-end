@@ -8,6 +8,16 @@ public class Department {
     private String Mgr_ssn;
     private Date Mgr_start_date;
 
+    public Department() {
+    }
+
+    public Department(String dname, int dnumber, String mgr_ssn, Date mgr_start_date) {
+        this.Dname = dname;
+        this.Dnumber = dnumber;
+        this.Mgr_ssn = mgr_ssn;
+        this.Mgr_start_date = mgr_start_date;
+    }
+
     // Getter and Setter for Dname
     public String getDname() {
         return Dname;
