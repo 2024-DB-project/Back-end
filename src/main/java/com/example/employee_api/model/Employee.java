@@ -2,7 +2,6 @@ package com.example.employee_api.model;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 public class Employee {
     private String fname;       // First Name

@@ -2,7 +2,6 @@ package com.example.employee_api.controller;
 
 import com.example.employee_api.model.Employee;
 import com.example.employee_api.service.EmployeeService;
-import com.example.employee_api.service.EmployeeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
