@@ -23,17 +23,27 @@ public class EmployeeServiceImpl implements EmployeeService{
         return employeeDao.getAllEmployees();
     }
 
+    @Override
+    public List<Employee> getAllTrashes() { return employeeDao.getAllTrashes(); }
+
+    @Override
     public Employee getEmployeeBySsn(String employeeSsn) {
         return employeeDao.getEmployeeBySsn(employeeSsn);
     }
+
     @Override
     public List<Employee> getEmployeeByAttr(List<String> searchAttr, List<String> employeeValue) {
         return employeeDao.getEmployeeByAttr(searchAttr, employeeValue);
     }
 
     @Override
-    public boolean deleteEmployeeBySsn(String employeeSsn) {
-        return employeeDao.deleteEmployeeBySsn(employeeSsn);
+    public boolean soft_deleteEmployeeBySsn(String employeeSsn) {
+        return employeeDao.soft_deleteEmployeeBySsn(employeeSsn);
+    }
+
+    @Override
+    public boolean hard_deleteEmployeeBySsn(String employeeSsn) {
+        return employeeDao.hard_deleteEmployeeBySsn(employeeSsn);
     }
 
     @Override

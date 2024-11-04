@@ -27,6 +27,12 @@ public class EmployeeController {
         return ResponseEntity.ok(employees);
     }
 
+    @GetMapping("/trash")
+    public ResponseEntity<List<Employee>> getAllTrashes() {
+        List<Employee> employees = employeeService.getAllTrashes();
+        return ResponseEntity.ok(employees);
+    }
+
     @GetMapping("/{employee_ssn}")
     public ResponseEntity<Employee> getEmployeeBySsn(@PathVariable("employee_ssn") String employeeSsn) {
         Employee employee = employeeService.getEmployeeBySsn(employeeSsn);
@@ -46,8 +52,14 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{employee_ssn}")
-    public ResponseEntity<String> deleteEmployeeBySsn(@PathVariable("employee_ssn") String employeeSsn) {
-        boolean isDeleted = employeeService.deleteEmployeeBySsn(employeeSsn);
+    public ResponseEntity<String> soft_deleteEmployeeBySsn(@PathVariable("employee_ssn") String employeeSsn) {
+        boolean isDeleted = employeeService.soft_deleteEmployeeBySsn(employeeSsn);
+        return isDeleted ? ResponseEntity.ok("Employee deleted successfully") : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/hard/{employee_ssn}")
+    public ResponseEntity<String> hard_deleteEmployeeBySsn(@PathVariable("employee_ssn") String employeeSsn) {
+        boolean isDeleted = employeeService.hard_deleteEmployeeBySsn(employeeSsn);
         return isDeleted ? ResponseEntity.ok("Employee deleted successfully") : ResponseEntity.notFound().build();
     }
 
