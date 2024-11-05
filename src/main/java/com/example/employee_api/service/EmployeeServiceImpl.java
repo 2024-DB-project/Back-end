@@ -1,7 +1,6 @@
 package com.example.employee_api.service;
 
 import com.example.employee_api.dao.EmployeeDao;
-import com.example.employee_api.dao.EmployeeDaoImpl;
 import com.example.employee_api.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,20 +19,30 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public List<Employee> getAllEmployees() {
-        return employeeDao.getAllEmployees();
+        return employeeDao.getAllEmployees(false);
     }
 
+    @Override
+    public List<Employee> getAllTrashes() { return employeeDao.getAllEmployees(true); }
+
+    @Override
     public Employee getEmployeeBySsn(String employeeSsn) {
         return employeeDao.getEmployeeBySsn(employeeSsn);
     }
+
     @Override
-    public List<Employee> getEmployeeByAttr(List<String> searchAttr, List<String> employeeValue) {
+    public List<Employee> getEmployeeByAttr(List<String> searchAttr, List<Object> employeeValue) {
         return employeeDao.getEmployeeByAttr(searchAttr, employeeValue);
     }
 
     @Override
-    public boolean deleteEmployeeBySsn(String employeeSsn) {
-        return employeeDao.deleteEmployeeBySsn(employeeSsn);
+    public boolean soft_deleteEmployeeBySsn(String employeeSsn) {
+        return employeeDao.deleteEmployeeBySsn(employeeSsn, false);
+    }
+
+    @Override
+    public boolean hard_deleteEmployeeBySsn(String employeeSsn) {
+        return employeeDao.deleteEmployeeBySsn(employeeSsn, true);
     }
 
     @Override
@@ -42,7 +51,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public Employee addEmployee(List<Object> changeValue) {
-        return employeeDao.addEmployee(changeValue);
+    public Employee addEmployee(List<Object> addingValue) {
+        return employeeDao.addEmployee(addingValue);
     }
 }
