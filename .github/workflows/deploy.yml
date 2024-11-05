@@ -46,6 +46,10 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           port: ${{ secrets.DEPLOYMENT_PORT }}
           script: |
+            export SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }}
+            export SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}
+            export SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+            
             PID=$(lsof -ti:8080)
             if [ -n "$PID" ]; then
               echo "기존 서버 프로세스 종료: PID $PID"
