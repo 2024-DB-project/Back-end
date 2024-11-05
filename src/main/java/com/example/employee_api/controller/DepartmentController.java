@@ -125,4 +125,15 @@ public class DepartmentController {
         Department createdDepartment = departmentService.addDepartment(addingValue);
         return ResponseEntity.status(201).body(createdDepartment);
     }
+
+    @Operation(summary = "부서 통계 정보 조회", description = "해당하는 dnumber값의 부서 통계(AVG/MAX/MIN Salary)를 조회합니다.", tags = {"조회(GET)"})
+    @PostMapping("/info/{dnumber}")
+    public ResponseEntity<List<Double>> getDepartmentInfo(@PathVariable("dnumber") String dnumber) {
+        try {
+            List<Double> departmentInfo = departmentService.getDepartmentInfo(Integer.parseInt(dnumber));
+            return ResponseEntity.status(201).body(departmentInfo);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 }
