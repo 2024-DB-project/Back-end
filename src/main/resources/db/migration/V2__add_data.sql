@@ -1,9 +1,9 @@
 TRUNCATE TABLE EMPLOYEE;
 TRUNCATE TABLE DEPARTMENT;
-TRUNCATE TABLE dept_locations;
-TRUNCATE TABLE project;
-TRUNCATE TABLE works_on;
-TRUNCATE TABLE dependent;
+TRUNCATE TABLE DEPT_LOCATIONS;
+TRUNCATE TABLE PROJECT;
+TRUNCATE TABLE WORKS_ON;
+TRUNCATE TABLE DEPENDENT;
 
 insert into EMPLOYEE
 value
@@ -22,7 +22,7 @@ value
 ('Administration', 4, '987654321', '1995-01-01'),
 ('Headquarters', 1, '888665555', '1981-06-19');
 
-insert into dept_locations
+insert into DEPT_LOCATIONS
 value
 (1, 'Houston'),
 (4, 'Stafford'),
@@ -30,7 +30,7 @@ value
 (5, 'Sugarland'),
 (5, 'Houston');
 
-insert into project
+insert into PROJECT
 value
 ('ProductX', 1, 'Bellaire', 5),
 ('ProductY', 2, 'Sugarland', 5),
@@ -39,7 +39,7 @@ value
 ('Reorganization', 20, 'Houston', 1),
 ('Newbenefits', 30, 'Stafford', 4);
 
-insert into works_on
+insert into WORKS_ON
 value
 ('123456789', 1, 32.5),
 ('123456789', 2, 7.5),
@@ -58,7 +58,7 @@ value
 ('987654321', 20, 15.0),
 ('888665555', 20, null);
 
-insert into dependent
+insert into DEPENDENT
 value
 ('333445555', 'Alice', 'F', '1986-04-05', 'Daughter'),
 ('333445555', 'Theodore', 'M', '1983-10-25', 'Son'),
