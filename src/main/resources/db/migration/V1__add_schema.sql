@@ -29,7 +29,7 @@ create table IF NOT EXISTS DEPT_LOCATIONS(
   primary key (Dnumber, Dlocation)
 );
 
-create table IF NOT EXISTS project(
+create table IF NOT EXISTS PROJECT(
   Pname VARCHAR(15) NOT NULL,
   Pnumber INT not null,
   Plocation varchar(15),
