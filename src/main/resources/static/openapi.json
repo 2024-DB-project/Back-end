@@ -67,7 +67,7 @@
               },
               "example": {
                 "fname": "Solomon",
-                "bdate": "2001-12-08T00:00:00.000Z",
+                "bdate": "2001-12-08",
                 "salary": 53126
               }
             }
@@ -87,7 +87,7 @@
                   "minit": "T",
                   "lname": "Wong",
                   "ssn": 333445555,
-                  "bdate": "2001-12-08T00:00:00.000Z",
+                  "bdate": "2001-12-08",
                   "address": "638 Voss, Houston, TX",
                   "sex": "M",
                   "salary": 53126,
@@ -202,7 +202,7 @@
                   "minit": "D",
                   "lname": "Doe",
                   "ssn": 123456789,
-                  "bdate": "1990-01-01T00:00:00.000Z",
+                  "bdate": "1990-01-01",
                   "address": "123 Main St",
                   "sex": "M",
                   "salary": 50000,
@@ -262,16 +262,16 @@
               "items": {
                 "type": "string",
                 "enum": [
-                  "Fname",
-                  "Minit",
-                  "Lname",
-                  "Ssn",
-                  "Bdate",
-                  "Address",
-                  "Sex",
-                  "Salary",
-                  "Super_ssn",
-                  "Dno"
+                  "fname",
+                  "minit",
+                  "lname",
+                  "ssn",
+                  "bdate",
+                  "address",
+                  "sex",
+                  "salary",
+                  "superSsn",
+                  "dno"
                 ]
               }
             }
@@ -359,8 +359,8 @@
           },
           "bdate": {
             "type": "string",
-            "format": "date-time",
-            "example": "1955-12-08T00:00:00.000Z"
+            "format": "date",
+            "example": "1955-12-08"
           },
           "address": {
             "type": "string",
