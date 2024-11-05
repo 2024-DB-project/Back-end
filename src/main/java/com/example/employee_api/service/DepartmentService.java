@@ -17,5 +17,5 @@ public interface DepartmentService {
     boolean hard_deleteDepartmentByDnumber(int dnumber);
     Department updateDepartmentByDnumber(int dnumber, Map<String, Object> updateValue);
     Department addDepartment(List<Object> addingValue);
-    List<Double> getDepartmentinfo(int dnumber);
+    List<Double> getDepartmentInfo(int dnumber);
 }

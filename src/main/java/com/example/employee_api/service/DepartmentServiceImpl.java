@@ -60,7 +60,7 @@ public class DepartmentServiceImpl implements DepartmentService{
         return departmentDao.addDepartment(addingValue);
     }
     @Override
-    public List<Double> getDepartmentinfo(int dnumber) {
+    public List<Double> getDepartmentInfo(int dnumber) {
         List<Double> result = new ArrayList<>();
         result.add(departmentDao.getDepartmentInfo(dnumber, AVG));
         result.add(departmentDao.getDepartmentInfo(dnumber, MAX));
