@@ -127,7 +127,7 @@ public class DepartmentController {
     }
 
     @Operation(summary = "부서 통계 정보 조회", description = "해당하는 dnumber값의 부서 통계(AVG/MAX/MIN Salary)를 조회합니다.", tags = {"조회(GET)"})
-    @PostMapping("/info/{dnumber}")
+    @GetMapping("/info/{dnumber}")
     public ResponseEntity<List<Double>> getDepartmentInfo(@PathVariable("dnumber") String dnumber) {
         try {
             List<Double> departmentInfo = departmentService.getDepartmentInfo(Integer.parseInt(dnumber));
