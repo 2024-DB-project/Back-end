@@ -68,7 +68,7 @@ public class DepartmentController {
             String attr = searchAttr.get(i);
             String value = departmentValue.get(i);
             try {
-                switch (attr) {
+                switch (attr.toLowerCase()) {
                     case "dname", "mgr_ssn", "mgr_start_date" -> searchValue.add(value);
                     case "dnumber" -> searchValue.add(Integer.parseInt(value));
                     default -> {
