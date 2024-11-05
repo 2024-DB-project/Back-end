@@ -1,17 +1,17 @@
 package com.example.employee_api.dao;
 
 import com.example.employee_api.model.Department;
-import com.example.employee_api.model.Employee;
+import com.example.employee_api.service.DepartmentService;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.Date;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class DepartmentDaoImpl implements DepartmentDao{
@@ -22,68 +22,9 @@ public class DepartmentDaoImpl implements DepartmentDao{
         this.template = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    //부서 추가
     @Override
-    public int createDepartment(String dname, int dnumber, String mgr_ssn, Date mgr_start_date) {
-        String sql = "insert into department(dname, dnumber, mgr_ssn, mgr_start_date) values (:dname, :dnumber, :mgr_ssn, :mgr_start_date)";
-
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("dname", dname);
-        params.addValue("dnumber", dnumber);
-        params.addValue("mgr_ssn", mgr_ssn);
-        params.addValue("mgr_start_date", mgr_start_date);
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        return template.update(sql, params, keyHolder);
-    }
-
-    //부서 정보 업데이트
-    @Override
-    public int updateDepartment(String dname, int dnumber, String mgr_ssn, Date mgr_start_date) {
-        String sql = "update department set dname = :dname, mgr_ssn = :mgr_ssn, mgr_start_date = :mgr_start_date where dnumber = :dnumber";
-
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("dname", dname);
-        params.addValue("mgr_ssn", mgr_ssn);
-        params.addValue("mgr_start_date", mgr_start_date);
-        params.addValue("dnumber", dnumber);
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        return template.update(sql, params, keyHolder);
-    }
-
-    // 생성된 부서에 Mgr정보 입력
-    @Override
-    public int insertManager(int dnumber, String mgr_ssn, Date mgr_start_date) {
-        String sql = "update department set mgr_ssn = :mgr_ssn, mgr_start_date = :mgr_start_date where dnumber = :dnumber";
-
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("mgr_ssn", mgr_ssn);
-        params.addValue("mgr_start_date", mgr_start_date);
-        params.addValue("dnumber", dnumber);
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        return template.update(sql, params, keyHolder);
-    }
-
-    // 부서 번호에 의한 부서 정보 조회
-    @Override
-    public Department getDepartmentByDnumber(int dnumber) {
-        String sql = "select * from department where dnumber = :dnumber";
-
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("dnumber", dnumber);
-
-        return template.queryForObject(sql, params, new BeanPropertyRowMapper<>(Department.class));
-    }
-
-    //전체 부서정보 조회
-    @Override
-    public List<Department> getAllDepartments() {
-        String sql = "select * from department";
+    public List<Department> getAllDepartments(boolean flag) {
+        String sql = "select * from department where trash = " + Boolean.toString(flag);
 
         return template.query(sql, (rs, rowNum) -> {
             Department department = new Department();
@@ -94,64 +35,121 @@ public class DepartmentDaoImpl implements DepartmentDao{
             return department;
         });
     }
-    
-    // 부서 번호에 의한 부서 내 인원 조회
+
     @Override
-    public List<Employee> getEmployeesByDnumber(int dnumber) {
-        String sql = "SELECT fname, minit, lname, ssn, bdate, address, sex, salary, super_ssn, dno, created, modified " +
-                "FROM employee " +
-                "WHERE dno = :dnumber";
+    public Department getDepartmentByDnumber(int dnumber) {
+        String sql = "select * from department where dnumber = :dnumber and trash = false";
 
-        MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("dnumber", dnumber);
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("dnumber", dnumber);
 
-        return template.query(sql, params, (rs, rowNum) ->
-                new Employee(
-                        rs.getString("fname"),
-                        rs.getString("minit"),
-                        rs.getString("lname"),
-                        rs.getString("ssn"),
-                        rs.getDate("bdate"),
-                        rs.getString("address"),
-                        rs.getString("sex"),
-                        rs.getDouble("salary"),
-                        rs.getString("super_ssn"),
-                        rs.getInt("dno"),
-                        rs.getTimestamp("created"),
-                        rs.getTimestamp("modified")
-                ));
+        return template.queryForObject(sql, params, new BeanPropertyRowMapper<>(Department.class));
     }
 
-    // 부서 별 평균 급여 정보 조회
     @Override
-    public Double getAverageSalaryByDepartment(int dnumber) {
-        String sql = "select avg(salary) from employee where dno = :dnumber";
+    public List<Department> getDepartmentByAttr(List<String> searchAttr, List<Object> departmentValue) {
+        StringBuilder queryBuilder = new StringBuilder("select * from department where trash = false and ");
 
-        MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("dnumber", dnumber);
+        MapSqlParameterSource params = new MapSqlParameterSource();
 
-        return template.queryForObject(sql, params, Double.class);
+        for (int i = 0; i < searchAttr.size(); i++) {
+            queryBuilder.append(searchAttr.get(i)).append(" = :param").append(i);
+            params.addValue("param" + i, departmentValue.get(i));
+            if (i < searchAttr.size() - 1) {
+                queryBuilder.append(" AND ");
+            }
+        }
+
+        String sql = queryBuilder.toString();
+
+        return template.query(sql, params, new BeanPropertyRowMapper<>(Department.class));
     }
 
-    // 부서 별 최고 연봉 인원 조회
     @Override
-    public Double getMaxSalaryByDepartment(int dnumber) {
-        String sql = "select max(salary) from employee where dno = :dnumber";
+    public boolean deleteDepartmentByDnumber(int dnumber, boolean flag) {
+        String sql = !flag ? "UPDATE DEPARTMENT SET trash = true WHERE dnumber = :dnumber" : "DELETE FROM DEPARTMENT WHERE dnumber = :dnumber AND trash = true";
 
-        MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("dnumber", dnumber);
-
-        return template.queryForObject(sql, params, Double.class);
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("dnumber", dnumber);
+        try {
+            int result = template.update(sql, params);
+            return result > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    // 부서 내 최저 연봉 인원 조회
     @Override
-    public Double getMinSalaryByDepartment(int dnumber) {
-        String sql = "select min(salary) from employee where dno = :dnumber";
+    public Department updateDepartmentByDnumber(int dnumber, Map<String, Object> updateValue) {
+        StringBuilder sql = new StringBuilder("UPDATE DEPARTMENT SET ");
 
-        MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("dnumber", dnumber);
+        Timestamp currentTimestamp = Timestamp.valueOf(LocalDateTime.now());
+        updateValue.put("modified", currentTimestamp);
 
-        return template.queryForObject(sql, params, Double.class);
+        MapSqlParameterSource params = new MapSqlParameterSource();
+
+        for (Map.Entry<String, Object> entry: updateValue.entrySet()) {
+            sql.append(entry.getKey()).append(" = :").append(entry.getKey()).append(", ");
+            params.addValue(entry.getKey(), entry.getValue());
+        }
+
+        sql.setLength(sql.length() -2);
+        sql.append(" WHERE Dnumber = :dnumber AND trash = false");
+        params.addValue("dnumber", dnumber);
+
+        try {
+            int result = template.update(sql.toString(), params);
+            if (result > 0) {
+                return getDepartmentByDnumber(dnumber);
+            }
+            else return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Department addDepartment(List<Object> addingValue) {
+        if (addingValue.size() < 10) {
+            throw new IllegalArgumentException("Invalid changeValue list");
+        }
+
+        String sql = "INSERT INTO DEPARTMENT (Dname, Dnumber, Mgr_ssn, Mgr_start_date, created, modified, trash) VALUES (:Dname, :Dnumber, :Mgr_ssn, :Mgr_start_date, :created, :modified, false)";
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("Dname", addingValue.get(0));
+        params.addValue("Dnumber", addingValue.get(1));
+        params.addValue("Mgr_ssn", addingValue.get(2));
+        params.addValue("Mgr_start_date", addingValue.get(3));
+        Timestamp currentTimestamp = Timestamp.valueOf(LocalDateTime.now());
+        params.addValue("created", currentTimestamp);
+        params.addValue("modified", currentTimestamp);
+
+        try {
+            int result = template.update(sql, params);
+            if (result > 0) {
+                return getDepartmentByDnumber(Integer.parseInt(addingValue.get(3).toString()));
+            }
+            else return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Double getDepartmentInfo(int dnumber, DepartmentService.OperationType operationType) {
+        String sql = "SELECT " + operationType + "(Salary) FROM DEPARTMENT WHERE Dnumber = :dnumber AND trash = false";
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("dnumber", dnumber);
+
+        try {
+            return template.queryForObject(sql, params, Double.class);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

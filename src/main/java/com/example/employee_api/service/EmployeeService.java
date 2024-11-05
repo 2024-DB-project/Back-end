@@ -9,7 +9,7 @@ public interface EmployeeService {
     List<Employee> getAllEmployees();
     List<Employee> getAllTrashes();
     Employee getEmployeeBySsn(String employeeSsn);
-    List<Employee> getEmployeeByAttr(List<String> searchAttr, List<String> employeeValue);
+    List<Employee> getEmployeeByAttr(List<String> searchAttr, List<Object> employeeValue);
     boolean soft_deleteEmployeeBySsn(String employeeSsn);
     boolean hard_deleteEmployeeBySsn(String employeeSsn);
     Employee updateEmployeeBySsn(String employeeSsn, Map<String, Object> updateValue);

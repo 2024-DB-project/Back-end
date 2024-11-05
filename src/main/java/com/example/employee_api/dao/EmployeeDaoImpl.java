@@ -22,41 +22,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public List<Employee> getAllEmployees() {
+    public List<Employee> getAllEmployees(boolean flag) {
         List<Employee> employees = new ArrayList<>();
-        String query = "SELECT * FROM EMPLOYEE WHERE trash = false";
-
-        try {
-            List<Map<String, Object>> results = dbManager.executeQuery(query);
-
-            for (Map<String, Object> row : results) {
-                Employee employee = new Employee();
-                employee.setFname((String) row.get("Fname"));
-                employee.setMinit((String) row.get("Minit"));
-                employee.setLname((String) row.get("Lname"));
-                employee.setSsn((String) row.get("Ssn"));
-                employee.setBdate((Date) row.get("Bdate"));
-                employee.setAddress((String) row.get("Address"));
-                employee.setSex((String) row.get("Sex"));
-                employee.setSalary(((BigDecimal) row.get("Salary")).doubleValue());
-                employee.setSuperSsn((String) row.get("Super_ssn"));
-                employee.setDno((int) row.get("Dno"));
-                employee.setCreated((Timestamp) row.get("created"));
-                employee.setModified((Timestamp) row.get("modified"));
-
-                employees.add(employee);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return employees;
-    }
-
-    @Override
-    public List<Employee> getAllTrashes() {
-        List<Employee> employees = new ArrayList<>();
-        String query = "SELECT * FROM EMPLOYEE WHERE trash = true";
+        String query = "SELECT * FROM EMPLOYEE WHERE trash = " + Boolean.toString(flag);
 
         try {
             List<Map<String, Object>> results = dbManager.executeQuery(query);
@@ -113,9 +81,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public List<Employee> getEmployeeByAttr(List<String> searchAttr, List<String> employeeValue) {
+    public List<Employee> getEmployeeByAttr(List<String> searchAttr, List<Object> employeeValue) {
         List<Employee> employees = new ArrayList<>();
-        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM EMPLOYEE WHERE trash false AND ");
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM EMPLOYEE WHERE trash = false AND ");
         for (int i = 0; i < searchAttr.size(); i++) {
             queryBuilder.append(searchAttr.get(i)).append(" = ?");
             if (i < searchAttr.size() - 1) {
@@ -151,21 +119,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public boolean soft_deleteEmployeeBySsn(String employeeSsn) {
-        String query = "UPDATE EMPLOYEE SET trash = true WHERE Ssn = ?";
-
-        try {
-            int result = dbManager.executeUpdate(query, employeeSsn);
-            return result > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public boolean hard_deleteEmployeeBySsn(String employeeSsn) {
-        String query = "DELETE FROM EMPLOYEE WHERE Ssn = ? AND trash = true";
+    public boolean deleteEmployeeBySsn(String employeeSsn, boolean flag) {
+        String query = !flag ? "UPDATE EMPLOYEE SET trash = true WHERE Ssn = ?" : "DELETE FROM EMPLOYEE WHERE Ssn = ? AND trash = true";
 
         try {
             int result = dbManager.executeUpdate(query, employeeSsn);
@@ -206,27 +161,26 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public Employee addEmployee(List<Object> changeValue) {
-        if (changeValue.size() < 10) {
+    public Employee addEmployee(List<Object> addingValue) {
+        if (addingValue.size() < 10) {
             throw new IllegalArgumentException("Invalid changeValue list");
         }
 
         String query = "INSERT INTO EMPLOYEE (Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dno, created, modified, trash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, false)";
 
         Timestamp currentTimestamp = Timestamp.valueOf(LocalDateTime.now());
-        changeValue.add(currentTimestamp);
-        changeValue.add(currentTimestamp);
+        addingValue.add(currentTimestamp);
+        addingValue.add(currentTimestamp);
 
         try {
-            int result = dbManager.executeUpdate(query, changeValue.toArray());
+            int result = dbManager.executeUpdate(query, addingValue.toArray());
             if (result > 0) {
-                return getEmployeeBySsn(changeValue.get(3).toString());
+                return getEmployeeBySsn(addingValue.get(3).toString());
             }
             else return null;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
-
     }
 }

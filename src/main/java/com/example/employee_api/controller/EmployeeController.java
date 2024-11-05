@@ -3,13 +3,16 @@ package com.example.employee_api.controller;
 import com.example.employee_api.model.Employee;
 import com.example.employee_api.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Tag(name = "EMPLOYEE", description = "Employee management APIs")
 @RestController
 @RequestMapping("/api/employee")
 public class EmployeeController {
@@ -51,7 +54,28 @@ public class EmployeeController {
         if (searchAttr.size() != employeeValue.size()) {
             return ResponseEntity.badRequest().body("not matching parameters");
         }
-        List<Employee> employees = employeeService.getEmployeeByAttr(searchAttr, employeeValue);
+
+        List<Object> searchValue = new ArrayList<>();
+        for (int i = 0; i < searchAttr.size(); i++) {
+            String attr = searchAttr.get(i);
+            String value = employeeValue.get(i);
+            try {
+                switch (attr) {
+                    case "fname", "minit", "lname", "ssn", "bdate", "address", "sex", "superSsn" -> searchValue.add(value);
+                    case "salary" -> searchValue.add(Double.parseDouble(value));
+                    case "dno" -> searchValue.add(Integer.parseInt(value));
+                    default -> {
+                        return ResponseEntity.badRequest().body("Unknown attribute: " + attr);
+                    }
+                }
+            } catch (NumberFormatException e) {
+                return ResponseEntity.badRequest().body("Invalid numeric value for attribute: " + attr);
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body("Invalid value for attribute: " + attr);
+            }
+        }
+
+        List<Employee> employees = employeeService.getEmployeeByAttr(searchAttr, searchValue);
         return employees != null ? ResponseEntity.ok(employees) : ResponseEntity.notFound().build();
     }
 
@@ -80,8 +104,8 @@ public class EmployeeController {
 
     @Operation(summary = "직원 정보 추가", description = "해당하는 데이터의 직원을 새로 추가합니다.", tags = {"추가(POST)"})
     @PostMapping
-    public ResponseEntity<Employee> addEmployee(@RequestBody List<Object> changeValue) {
-        Employee createdEmployee = employeeService.addEmployee(changeValue);
+    public ResponseEntity<Employee> addEmployee(@RequestBody List<Object> addingValue) {
+        Employee createdEmployee = employeeService.addEmployee(addingValue);
         return ResponseEntity.status(201).body(createdEmployee);
     }
 }

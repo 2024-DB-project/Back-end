@@ -6,12 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 public interface EmployeeDao {
-    List<Employee> getAllEmployees();
-    List<Employee> getAllTrashes();
+    List<Employee> getAllEmployees(boolean flag);
     Employee getEmployeeBySsn(String employeeSsn);
-    List<Employee> getEmployeeByAttr(List<String> searchAttr, List<String> employeeValue);
-    boolean soft_deleteEmployeeBySsn(String employeeSsn);
-    boolean hard_deleteEmployeeBySsn(String employeeSsn);
+    List<Employee> getEmployeeByAttr(List<String> searchAttr, List<Object> employeeValue);
+    boolean deleteEmployeeBySsn(String employeeSsn, boolean flag);
     Employee updateEmployeeBySsn(String employeeSsn, Map<String, Object> employee);
-    Employee addEmployee(List<Object> changeValue);
+    Employee addEmployee(List<Object> addingValue);
 }
