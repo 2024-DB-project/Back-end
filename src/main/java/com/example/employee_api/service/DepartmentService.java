@@ -1,19 +1,21 @@
 package com.example.employee_api.service;
 
 import com.example.employee_api.model.Department;
-import com.example.employee_api.model.Employee;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface DepartmentService {
-    int createDepartment(String dname, int dnumber, String mgr_ssn, Date mgr_start_date);
-    int updateDepartment(String dname,int dnumber, String mgr_ssn, Date mgr_start_date);
-    int insertManager(int dnumber, String mgr_ssn, Date mgr_start_date);
-    Department getDepartmentByDnumber(int dnumber);
+    enum OperationType {
+        AVG, MAX, MIN
+    }
     List<Department> getAllDepartments();
-    List<Employee> getEmployeesByDnumber(int dnumber);
-    Double getAverageSalaryByDepartment(int dnumber);
-    Double getMaxSalaryByDepartment(int dnumber);
-    Double getMinSalaryByDepartment(int dnumber);
+    List<Department> getAllTrashes();
+    Department getDepartmentByDnumber(int dnumber);
+    List<Department> getDepartmentByAttr(List<String> searchAttr, List<Object> departmentValue);
+    boolean soft_deleteDepartmentByDnumber(int dnumber);
+    boolean hard_deleteDepartmentByDnumber(int dnumber);
+    Department updateDepartmentByDnumber(int dnumber, Map<String, Object> updateValue);
+    Department addDepartment(List<Object> addingValue);
+    List<Double> getDepartmentinfo(int dnumber);
 }

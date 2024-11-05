@@ -1,16 +1,18 @@
 package com.example.employee_api.controller;
 
 import com.example.employee_api.model.Department;
-import com.example.employee_api.model.Employee;
 import com.example.employee_api.service.DepartmentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+@Tag(name = "DEPARTMENT", description = "Department management APIs")
 @RestController
 @RequestMapping("/api/department")
 public class DepartmentController {
@@ -22,48 +24,105 @@ public class DepartmentController {
         this.departmentService = departmentService;
     }
 
-    // 01. 부서 추가
-    public int createDepartment(String dname, int dnumber, String mgr_ssn, Date mgr_start_date) {
-        return departmentService.createDepartment(dname, dnumber, mgr_ssn, mgr_start_date);
+    // 01. 모든 부서 조회
+    @Operation(summary = "모든 부서 조회", description = "모든 부서 정보를 조회합니다.", tags = {"조회(GET)"})
+    @GetMapping
+    public ResponseEntity<List<Department>> getAllDepartment() {
+        List<Department> departments = departmentService.getAllDepartments();
+        return ResponseEntity.ok(departments);
     }
 
-    // 02. 부서 수정
-    public int updateDepartment(String dname,int dnumber, String mgr_ssn, Date mgr_start_date) {
-        return departmentService.updateDepartment(dname, dnumber, mgr_ssn, mgr_start_date);
+    // 02. 휴지통 부서 조회
+    @Operation(summary = "휴지통 부서 조회", description = "휴지통의 모든 부서 정보를 조회합니다.", tags = {"조회(GET)"})
+    @GetMapping("/trash")
+    public ResponseEntity<List<Department>> getAllTrashes() {
+        List<Department> departments = departmentService.getAllTrashes();
+        return ResponseEntity.ok(departments);
     }
 
-    // 03. 매니저 추가
-    public int insertManager(int dnumber, String mgr_ssn, Date mgr_start_date) {
-        return departmentService.insertManager(dnumber, mgr_ssn, mgr_start_date);
+    // 03. dnumber로 부서 조회
+    @Operation(summary = "특정 dnumber 부서 조회", description = "dnumber값을 통해 특정 부서를 조회합니다.", tags = {"조회(GET)"})
+    @GetMapping("/{dnumber}")
+    public ResponseEntity<Department> getDepartmentByDnumber(@PathVariable("dnumber") String dnumber) {
+        try {
+            Department department = departmentService.getDepartmentByDnumber(Integer.parseInt(dnumber));
+            return department != null ? ResponseEntity.ok(department) : ResponseEntity.notFound().build();
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
-    // 04. 부서 번호로 부서 단건 조회
-    public Department getDepartmentByDnumber(int dnumber) {
-        return departmentService.getDepartmentByDnumber(dnumber);
+    // 04. 임의의 특성값으로 부서 조회
+    @Operation(summary = "부서 검색", description = "임의의 특성값을 통해 부서를 조회합니다.", tags = {"조회(GET)"})
+    @GetMapping("/search")
+    public ResponseEntity<?> getDepartmentByAttr(
+            @RequestParam(value = "search_attr") List<String> searchAttr,
+            @RequestParam(value = "department_value") List<String> departmentValue) {
+
+        if (searchAttr.size() != departmentValue.size()) {
+            return ResponseEntity.badRequest().body("not matching parameters");
+        }
+
+        List<Object> searchValue = new ArrayList<>();
+        for (int i = 0; i < searchAttr.size(); i++) {
+            String attr = searchAttr.get(i);
+            String value = departmentValue.get(i);
+            try {
+                switch (attr) {
+                    case "dname", "mgr_ssn", "mgr_start_date" -> searchValue.add(value);
+                    case "dnumber" -> searchValue.add(Integer.parseInt(value));
+                    default -> {
+                        return ResponseEntity.badRequest().body("Unknown attribute: " + attr);
+                    }
+                }
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body("Invalid value for attribute: " + attr);
+            }
+        }
+        List<Department> departments = departmentService.getDepartmentByAttr(searchAttr, searchValue);
+        return departments != null ? ResponseEntity.ok(departments) : ResponseEntity.notFound().build();
     }
 
-    // 05. 부서 전체 조회
-    public List<Department> getAllDepartments() {
-        return departmentService.getAllDepartments();
+    @Operation(summary = "부서 삭제(휴지통)", description = "해당하는 dnumber값의 부서 정보를 휴지통으로 삭제합니다.", tags = {"삭제(DELETE)"})
+    @DeleteMapping("/{dnumber}")
+    public ResponseEntity<String> soft_deleteDepartmentByDnumber(@PathVariable("dnumber") String dnumber) {
+        try {
+            boolean isDeleted = departmentService.soft_deleteDepartmentByDnumber(Integer.parseInt(dnumber));
+            return isDeleted ? ResponseEntity.ok("Department deleted successfully") : ResponseEntity.notFound().build();
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
-    // 06. 부서 번호에 해당하는 사원 찾기
-    public List<Employee> getEmployeesByDnumber(int dnumber) {
-        return departmentService.getEmployeesByDnumber(dnumber);
+    @Operation(summary = "부서 완전 삭제", description = "해당하는 dnumber값의 부서 정보를 완전히 삭제합니다.", tags = {"삭제(DELETE)"})
+    @DeleteMapping("/hard/{dnumber}")
+    public ResponseEntity<String> hard_deleteDepartmentByDnumber(@PathVariable("dnumber") String dnumber) {
+        try {
+            boolean isDeleted = departmentService.hard_deleteDepartmentByDnumber(Integer.parseInt(dnumber));
+            return isDeleted ? ResponseEntity.ok("Department deleted successfully") : ResponseEntity.notFound().build();
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
     }
 
-    // 07. 부서에 따른 월급 평균
-    public Double getAverageSalaryByDepartment(int dnumber) {
-        return departmentService.getAverageSalaryByDepartment(dnumber);
+    @Operation(summary = "부서 정보 수정", description = "특정 dnumber값의 부서 정보를 수정합니다.", tags = {"업데이트(PUT)"})
+    @PutMapping("/{dnumber}")
+    public ResponseEntity<Department> updateDepartmentByDnumber(
+            @PathVariable("dnumber") String dnumber,
+            @RequestBody Map<String, Object> changeValue) {
+        try {
+            Department updatedDepartment = departmentService.updateDepartmentByDnumber(Integer.parseInt(dnumber), changeValue);
+            return updatedDepartment != null ? ResponseEntity.ok(updatedDepartment) : ResponseEntity.notFound().build();
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
-    // 08. 부서에 따른 월급 최대
-    public Double getMaxSalaryByDepartment(int dnumber) {
-        return departmentService.getMaxSalaryByDepartment(dnumber);
-    }
-
-    // 09. 부서에 따른 월급 최소
-    public Double getMinSalaryByDepartment(int dnumber) {
-        return departmentService.getMinSalaryByDepartment(dnumber);
+    @Operation(summary = "부서 정보 추가", description = "해당하는 데이터의 부서를 새로 추가합니다.", tags = {"추가(POST)"})
+    @PostMapping
+    public ResponseEntity<Department> addDepartment(@RequestBody List<Object> addingValue) {
+        Department createdDepartment = departmentService.addDepartment(addingValue);
+        return ResponseEntity.status(201).body(createdDepartment);
     }
 }
