@@ -19,6 +19,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Build with Maven
+        run: mvn package -DskipTests
+
       - name: Set executable permissions
         run: chmod +x ./mvnw
 
