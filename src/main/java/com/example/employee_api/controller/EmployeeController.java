@@ -93,6 +93,13 @@ public class EmployeeController {
         return isDeleted ? ResponseEntity.ok("Employee deleted successfully") : ResponseEntity.notFound().build();
     }
 
+    @Operation(summary = "직원 복원", description = "휴지통에 있는 직원 정보를 복원합니다.", tags = {"업데이트(PUT)"})
+    @PutMapping("/restore/{employee_ssn}")
+    public ResponseEntity<String> restoreEmployeeBySsn(@PathVariable("employee_ssn") String employeeSsn) {
+        boolean isRestored = employeeService.restoreEmployeeBySsn(employeeSsn);
+        return isRestored ? ResponseEntity.ok("Employee restored successfully") : ResponseEntity.notFound().build();
+    }
+
     @Operation(summary = "직원 정보 수정", description = "특정 ssn값의 직원 정보를 수정합니다.", tags = {"업데이트(PUT)"})
     @PutMapping("/{employee_ssn}")
     public ResponseEntity<Employee> updateEmployeeBySsn(

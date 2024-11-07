@@ -15,6 +15,7 @@ public interface DepartmentService {
     List<Department> getDepartmentByAttr(List<String> searchAttr, List<Object> departmentValue);
     boolean soft_deleteDepartmentByDnumber(int dnumber);
     boolean hard_deleteDepartmentByDnumber(int dnumber);
+    boolean restoreDepartmentByDnumber(int dnumber);
     Department updateDepartmentByDnumber(int dnumber, Map<String, Object> updateValue);
     Department addDepartment(List<Object> addingValue);
     List<Double> getDepartmentInfo(int dnumber);

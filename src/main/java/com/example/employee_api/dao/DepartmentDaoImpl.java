@@ -23,20 +23,6 @@ public class DepartmentDaoImpl implements DepartmentDao{
     }
 
     @Override
-    public List<Department> getAllDepartments(boolean flag) {
-        String sql = "select * from DEPARTMENT where trash = " + Boolean.toString(flag);
-
-        return template.query(sql, (rs, rowNum) -> {
-            Department department = new Department();
-            department.setDname(rs.getString("dname"));
-            department.setDnumber(rs.getInt("dnumber"));
-            department.setMgr_ssn(rs.getString("mgr_ssn"));
-            department.setMgr_start_date(rs.getDate("mgr_start_date"));
-            return department;
-        });
-    }
-
-    @Override
     public Department getDepartmentByDnumber(int dnumber) {
         String sql = "select * from DEPARTMENT where dnumber = :dnumber and trash = false";
 
@@ -66,9 +52,8 @@ public class DepartmentDaoImpl implements DepartmentDao{
     }
 
     @Override
-    public boolean deleteDepartmentByDnumber(int dnumber, boolean flag) {
-        String sql = !flag ? "UPDATE DEPARTMENT SET trash = true WHERE dnumber = :dnumber" : "DELETE FROM DEPARTMENT WHERE dnumber = :dnumber AND trash = true";
-
+    public boolean deleteDepartmentByDnumber(int dnumber) {
+        String sql = "DELETE FROM DEPARTMENT WHERE dnumber = :dnumber AND trash = true";
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("dnumber", dnumber);
         try {

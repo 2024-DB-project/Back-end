@@ -103,7 +103,17 @@ public class DepartmentController {
         } catch (NumberFormatException e) {
             return ResponseEntity.badRequest().body(null);
         }
+    }
 
+    @Operation(summary = "부서 복원", description = "해당하는 dnumber값의 부서 정보를 복원합니다.", tags = {"업데이트(PUT)"})
+    @PutMapping("/restore/{dnumber}")
+    public ResponseEntity<String> restoreDepartmentByDnumber(@PathVariable("dnumber") String dnumber) {
+        try {
+            boolean isRestored = departmentService.restoreDepartmentByDnumber(Integer.parseInt(dnumber));
+            return isRestored ? ResponseEntity.ok("Department restored successfully") : ResponseEntity.notFound().build();
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @Operation(summary = "부서 정보 수정", description = "특정 dnumber값의 부서 정보를 수정합니다.", tags = {"업데이트(PUT)"})
