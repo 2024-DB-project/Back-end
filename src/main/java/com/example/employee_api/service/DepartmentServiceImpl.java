@@ -23,12 +23,12 @@ public class DepartmentServiceImpl implements DepartmentService{
 
     @Override
     public List<Department> getAllDepartments() {
-        return departmentDao.getAllDepartments(false);
+        return departmentDao.getDepartmentByAttr(List.of("trash"), List.of(false));
     }
 
     @Override
     public List<Department> getAllTrashes() {
-        return departmentDao.getAllDepartments(true);
+        return departmentDao.getDepartmentByAttr(List.of("trash"), List.of(true));
     }
 
     @Override
@@ -43,12 +43,17 @@ public class DepartmentServiceImpl implements DepartmentService{
 
     @Override
     public boolean soft_deleteDepartmentByDnumber(int dnumber) {
-        return departmentDao.deleteDepartmentByDnumber(dnumber, false);
+        return departmentDao.updateDepartmentByDnumber(dnumber, Map.of("trash", true)) != null;
     }
 
     @Override
     public boolean hard_deleteDepartmentByDnumber(int dnumber) {
-        return departmentDao.deleteDepartmentByDnumber(dnumber, true);
+        return departmentDao.deleteDepartmentByDnumber(dnumber);
+    }
+
+    @Override
+    public boolean restoreDepartmentByDnumber(int dnumber) {
+        return departmentDao.updateDepartmentByDnumber(dnumber, Map.of("trash", false)) != null;
     }
 
     @Override

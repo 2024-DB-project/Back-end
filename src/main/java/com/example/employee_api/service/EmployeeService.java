@@ -12,6 +12,7 @@ public interface EmployeeService {
     List<Employee> getEmployeeByAttr(List<String> searchAttr, List<Object> employeeValue);
     boolean soft_deleteEmployeeBySsn(String employeeSsn);
     boolean hard_deleteEmployeeBySsn(String employeeSsn);
+    boolean restoreEmployeeBySsn(String employeeSsn);
     Employee updateEmployeeBySsn(String employeeSsn, Map<String, Object> updateValue);
     Employee addEmployee(List<Object> changeValue);
 }

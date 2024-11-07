@@ -19,11 +19,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public List<Employee> getAllEmployees() {
-        return employeeDao.getAllEmployees(false);
+        return employeeDao.getEmployeeByAttr(List.of("trash"), List.of(false));
     }
 
     @Override
-    public List<Employee> getAllTrashes() { return employeeDao.getAllEmployees(true); }
+    public List<Employee> getAllTrashes() { return employeeDao.getEmployeeByAttr(List.of("trash"), List.of(true)); }
 
     @Override
     public Employee getEmployeeBySsn(String employeeSsn) {
@@ -37,12 +37,17 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public boolean soft_deleteEmployeeBySsn(String employeeSsn) {
-        return employeeDao.deleteEmployeeBySsn(employeeSsn, false);
+        return employeeDao.updateEmployeeBySsn(employeeSsn, Map.of("trash", true)) != null;
     }
 
     @Override
     public boolean hard_deleteEmployeeBySsn(String employeeSsn) {
-        return employeeDao.deleteEmployeeBySsn(employeeSsn, true);
+        return employeeDao.deleteEmployeeBySsn(employeeSsn);
+    }
+
+    @Override
+    public boolean restoreEmployeeBySsn(String employeeSsn) {
+        return employeeDao.updateEmployeeBySsn(employeeSsn, Map.of("trash", false)) != null;
     }
 
     @Override

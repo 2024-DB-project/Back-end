@@ -22,38 +22,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public List<Employee> getAllEmployees(boolean flag) {
-        List<Employee> employees = new ArrayList<>();
-        String query = "SELECT * FROM EMPLOYEE WHERE trash = " + Boolean.toString(flag);
-
-        try {
-            List<Map<String, Object>> results = dbManager.executeQuery(query);
-
-            for (Map<String, Object> row : results) {
-                Employee employee = new Employee();
-                employee.setFname((String) row.get("Fname"));
-                employee.setMinit((String) row.get("Minit"));
-                employee.setLname((String) row.get("Lname"));
-                employee.setSsn((String) row.get("Ssn"));
-                employee.setBdate((Date) row.get("Bdate"));
-                employee.setAddress((String) row.get("Address"));
-                employee.setSex((String) row.get("Sex"));
-                employee.setSalary(((BigDecimal) row.get("Salary")).doubleValue());
-                employee.setSuperSsn((String) row.get("Super_ssn"));
-                employee.setDno((int) row.get("Dno"));
-                employee.setCreated((Timestamp) row.get("created"));
-                employee.setModified((Timestamp) row.get("modified"));
-
-                employees.add(employee);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return employees;
-    }
-
-    @Override
     public Employee getEmployeeBySsn(String employeeSsn) {
         Employee employee = new Employee();
         String query = "SELECT * FROM EMPLOYEE WHERE Ssn = ? AND trash = false";
@@ -119,9 +87,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public boolean deleteEmployeeBySsn(String employeeSsn, boolean flag) {
-        String query = !flag ? "UPDATE EMPLOYEE SET trash = true WHERE Ssn = ?" : "DELETE FROM EMPLOYEE WHERE Ssn = ? AND trash = true";
-
+    public boolean deleteEmployeeBySsn(String employeeSsn) {
+        String query = "DELETE FROM EMPLOYEE WHERE Ssn = ? AND trash = true";
         try {
             int result = dbManager.executeUpdate(query, employeeSsn);
             return result > 0;

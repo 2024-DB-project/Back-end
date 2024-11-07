@@ -7,10 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface DepartmentDao {
-    List<Department> getAllDepartments(boolean flag);
     Department getDepartmentByDnumber(int dnumber);
     List<Department> getDepartmentByAttr(List<String> searchAttr, List<Object> departmentValue);
-    boolean deleteDepartmentByDnumber(int dnumber, boolean flag);
+    boolean deleteDepartmentByDnumber(int dnumber);
     Department updateDepartmentByDnumber(int dnumber, Map<String, Object> updateValue);
     Department addDepartment(List<Object> addingValue);
     Double getDepartmentInfo(int dnumber, DepartmentService.OperationType operationType);
