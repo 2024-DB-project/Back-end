@@ -42,7 +42,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.setDno((int) result.get("Dno"));
                 employee.setCreated((Timestamp) result.get("created"));
                 employee.setModified((Timestamp) result.get("modified"));
-            }
+            } else return null;
         } catch (SQLException e) {
             e.printStackTrace();
         }
