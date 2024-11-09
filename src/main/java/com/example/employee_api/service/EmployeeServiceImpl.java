@@ -37,7 +37,10 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public boolean soft_deleteEmployeeBySsn(String employeeSsn) {
-        return employeeDao.updateEmployeeBySsn(employeeSsn, Map.of("trash", true)) != null;
+        if (employeeDao.getEmployeeBySsn(employeeSsn) == null) {
+            return false;
+        }
+        return employeeDao.updateEmployeeBySsn(employeeSsn, Map.of("trash", true)) == null;
     }
 
     @Override

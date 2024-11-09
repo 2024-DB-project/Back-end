@@ -43,7 +43,10 @@ public class DepartmentServiceImpl implements DepartmentService{
 
     @Override
     public boolean soft_deleteDepartmentByDnumber(int dnumber) {
-        return departmentDao.updateDepartmentByDnumber(dnumber, Map.of("trash", true)) != null;
+        if (departmentDao.getDepartmentByDnumber(dnumber) == null) {
+            return false;
+        }
+        return departmentDao.updateDepartmentByDnumber(dnumber, Map.of("trash", true)) == null;
     }
 
     @Override
