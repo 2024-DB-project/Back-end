@@ -28,7 +28,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
         String query = "SELECT * FROM EMPLOYEE WHERE Ssn = ? AND trash = false";
 
         try {
-            Map<String, Object> result = dbManager.executeQuery(query, employeeSsn).get(0);
+            List<Map<String, Object>> results = dbManager.executeQuery(query, employeeSsn);
+            if (results.isEmpty()) {
+                return null; // Return null if no results found
+            }
+            Map<String, Object> result = results.get(0);
             if (result != null) {
                 employee.setFname((String) result.get("Fname"));
                 employee.setMinit((String) result.get("Minit"));
@@ -42,7 +46,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.setDno((int) result.get("Dno"));
                 employee.setCreated((Timestamp) result.get("created"));
                 employee.setModified((Timestamp) result.get("modified"));
-            } else return null;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
