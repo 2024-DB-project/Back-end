@@ -9,6 +9,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -123,15 +125,15 @@ public class DepartmentDaoImpl implements DepartmentDao{
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("Dname", addingValue.get(0));
-        params.addValue("Dnumber", addingValue.get(1));
+        params.addValue("Dnumber", Integer.parseInt(addingValue.get(1).toString()));
         params.addValue("Mgr_ssn", addingValue.get(2));
-        params.addValue("Mgr_start_date", addingValue.get(3).toString());
+        params.addValue("Mgr_start_date", addingValue.get(3));
         params.addValue("trash", false);
 
         try {
             int result = template.update(sql, params);
             if (result > 0) {
-                return getDepartmentByDnumber(Integer.parseInt(addingValue.get(3).toString()));
+                return getDepartmentByDnumber(Integer.parseInt(addingValue.get(1).toString()));
             }
             else return null;
         } catch (Exception e) {
