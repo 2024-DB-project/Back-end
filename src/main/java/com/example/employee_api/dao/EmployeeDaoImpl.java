@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -104,6 +105,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         List<Object> params = new ArrayList<>();
 
         Timestamp currentTimestamp = Timestamp.valueOf(LocalDateTime.now());
+        changeValue = new HashMap<>(changeValue);
         changeValue.put("modified", currentTimestamp);
 
         for (Map.Entry<String, Object> entry: changeValue.entrySet()) {
