@@ -2,6 +2,7 @@ package com.example.employee_api.dao;
 
 import com.example.employee_api.model.Department;
 import com.example.employee_api.service.DepartmentService;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -27,7 +28,11 @@ public class DepartmentDaoImpl implements DepartmentDao{
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("dnumber", dnumber);
 
-        return template.queryForObject(sql, params, new BeanPropertyRowMapper<>(Department.class));
+        try {
+            return template.queryForObject(sql, params, new BeanPropertyRowMapper<>(Department.class));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
