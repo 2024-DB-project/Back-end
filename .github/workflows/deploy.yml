@@ -47,6 +47,10 @@ jobs:
           port: ${{ secrets.DEPLOYMENT_PORT }}
           script: |
             cd /home/${{ secrets.DEPLOYMENT_USERNAME }}/project
+            export SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }}
+            export SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}
+            export SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+            
             docker build -t employee-api:latest .
             docker stop employee-api || true
             docker rm employee-api || true
