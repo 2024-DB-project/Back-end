@@ -101,7 +101,7 @@ public class DepartmentDaoImpl implements DepartmentDao{
             throw new IllegalArgumentException("Invalid changeValue list");
         }
 
-        String sql = "INSERT INTO DEPARTMENT (Dname, Dnumber, Mgr_ssn, Mgr_start_date, created, modified, trash) VALUES (:Dname, :Dnumber, :Mgr_ssn, :Mgr_start_date, :created, :modified, false)";
+        String sql = "INSERT INTO DEPARTMENT (Dname, Dnumber, Mgr_ssn, Mgr_start_date, created, modified, trash) VALUES (:Dname, :Dnumber, :Mgr_ssn, :Mgr_start_date, :created, :modified, :trash)";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("Dname", addingValue.get(0));
@@ -111,6 +111,7 @@ public class DepartmentDaoImpl implements DepartmentDao{
         Timestamp currentTimestamp = Timestamp.valueOf(LocalDateTime.now());
         params.addValue("created", currentTimestamp);
         params.addValue("modified", currentTimestamp);
+        params.addValue("trash", false);
 
         try {
             int result = template.update(sql, params);
