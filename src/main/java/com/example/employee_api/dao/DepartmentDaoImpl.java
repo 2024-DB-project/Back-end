@@ -8,8 +8,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -68,9 +66,6 @@ public class DepartmentDaoImpl implements DepartmentDao{
     @Override
     public Department updateDepartmentByDnumber(int dnumber, Map<String, Object> updateValue) {
         StringBuilder sql = new StringBuilder("UPDATE DEPARTMENT SET ");
-
-        Timestamp currentTimestamp = Timestamp.valueOf(LocalDateTime.now());
-        updateValue.put("modified", currentTimestamp);
 
         MapSqlParameterSource params = new MapSqlParameterSource();
 
