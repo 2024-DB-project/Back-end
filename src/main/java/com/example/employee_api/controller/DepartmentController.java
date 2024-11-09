@@ -129,7 +129,7 @@ public class DepartmentController {
         }
     }
 
-    @Operation(summary = "부서 정보 추가", description = "해당하는 데이터의 부서를 새로 추가합니다.", tags = {"추가(POST)"})
+    @Operation(summary = "부서 추가", description = "해당하는 데이터의 부서를 새로 추가합니다.", tags = {"추가(POST)"})
     @PostMapping
     public ResponseEntity<Department> addDepartment(@RequestBody List<Object> addingValue) {
         Department createdDepartment = departmentService.addDepartment(addingValue);

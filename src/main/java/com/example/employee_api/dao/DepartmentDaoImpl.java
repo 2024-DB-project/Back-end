@@ -97,7 +97,7 @@ public class DepartmentDaoImpl implements DepartmentDao{
 
     @Override
     public Department addDepartment(List<Object> addingValue) {
-        if (addingValue.size() != 7) {
+        if (addingValue.size() != 4) {
             throw new IllegalArgumentException("Invalid changeValue list");
         }
 
