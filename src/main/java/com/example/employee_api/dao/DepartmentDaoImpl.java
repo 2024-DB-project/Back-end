@@ -102,7 +102,7 @@ public class DepartmentDaoImpl implements DepartmentDao{
         params.addValue("Dname", addingValue.get(0));
         params.addValue("Dnumber", addingValue.get(1));
         params.addValue("Mgr_ssn", addingValue.get(2));
-        params.addValue("Mgr_start_date", addingValue.get(3));
+        params.addValue("Mgr_start_date", addingValue.get(3).toString());
         params.addValue("trash", false);
 
         try {
