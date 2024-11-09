@@ -37,7 +37,7 @@ public class DepartmentDaoImpl implements DepartmentDao{
 
     @Override
     public List<Department> getDepartmentByAttr(List<String> searchAttr, List<Object> departmentValue) {
-        StringBuilder queryBuilder = new StringBuilder("select * from DEPARTMENT where trash = false and ");
+        StringBuilder queryBuilder = new StringBuilder("select * from DEPARTMENT where ");
 
         MapSqlParameterSource params = new MapSqlParameterSource();
 
@@ -85,6 +85,24 @@ public class DepartmentDaoImpl implements DepartmentDao{
 
         try {
             int result = template.update(sql.toString(), params);
+            if (result > 0) {
+                return getDepartmentByDnumber(dnumber);
+            }
+            else return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Department restoreDepartmentByDnumber(int dnumber) {
+        String sql = "UPDATE DEPARTMENT SET trash = false WHERE Dnumber = :dnumber AND trash = true";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("dnumber", dnumber);
+
+        try {
+            int result = template.update(sql, params);
             if (result > 0) {
                 return getDepartmentByDnumber(dnumber);
             }

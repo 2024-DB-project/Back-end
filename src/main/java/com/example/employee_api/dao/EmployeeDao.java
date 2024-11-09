@@ -10,5 +10,6 @@ public interface EmployeeDao {
     List<Employee> getEmployeeByAttr(List<String> searchAttr, List<Object> employeeValue);
     boolean deleteEmployeeBySsn(String employeeSsn);
     Employee updateEmployeeBySsn(String employeeSsn, Map<String, Object> employee);
+    Employee restoreEmployeeBySsn(String employeeSsn);
     Employee addEmployee(List<Object> addingValue);
 }

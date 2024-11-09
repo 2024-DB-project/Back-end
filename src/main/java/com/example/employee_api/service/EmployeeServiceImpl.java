@@ -32,6 +32,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public List<Employee> getEmployeeByAttr(List<String> searchAttr, List<Object> employeeValue) {
+        searchAttr.add("trash");
+        employeeValue.add(false);
         return employeeDao.getEmployeeByAttr(searchAttr, employeeValue);
     }
 
@@ -50,7 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public boolean restoreEmployeeBySsn(String employeeSsn) {
-        return employeeDao.updateEmployeeBySsn(employeeSsn, Map.of("trash", false)) != null;
+        return employeeDao.restoreEmployeeBySsn(employeeSsn) != null;
     }
 
     @Override

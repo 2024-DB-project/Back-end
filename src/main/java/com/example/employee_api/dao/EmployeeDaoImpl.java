@@ -56,7 +56,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
     public List<Employee> getEmployeeByAttr(List<String> searchAttr, List<Object> employeeValue) {
         List<Employee> employees = new ArrayList<>();
-        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM EMPLOYEE WHERE trash = false AND ");
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM EMPLOYEE WHERE ");
         for (int i = 0; i < searchAttr.size(); i++) {
             queryBuilder.append(searchAttr.get(i)).append(" = ?");
             if (i < searchAttr.size() - 1) {
@@ -123,6 +123,21 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
         try {
             int result = dbManager.executeUpdate(query.toString(), params.toArray());
+            if (result > 0) {
+                return getEmployeeBySsn(employeeSsn);
+            }
+            else return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Employee restoreEmployeeBySsn(String employeeSsn) {
+        String query = "UPDATE EMPLOYEE SET trash = false WHERE Ssn = ? AND trash = true";
+        try {
+            int result = dbManager.executeUpdate(query, employeeSsn);
             if (result > 0) {
                 return getEmployeeBySsn(employeeSsn);
             }
