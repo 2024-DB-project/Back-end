@@ -51,7 +51,7 @@ jobs:
             docker stop employee-api || true
             docker rm employee-api || true
             docker run -d -p 8080:8080 --name employee-api \
-              -e SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/your_database_name \
+              -e SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/mydb \
               -e SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }} \
               -e SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD }} \
               employee-api:latest
