@@ -11,6 +11,7 @@ public interface DepartmentDao {
     List<Department> getDepartmentByAttr(List<String> searchAttr, List<Object> departmentValue);
     boolean deleteDepartmentByDnumber(int dnumber);
     Department updateDepartmentByDnumber(int dnumber, Map<String, Object> updateValue);
+    Department restoreDepartmentByDnumber(int dnumber);
     Department addDepartment(List<Object> addingValue);
     Double getDepartmentInfo(int dnumber, DepartmentService.OperationType operationType);
 }

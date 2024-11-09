@@ -69,7 +69,8 @@ public class DepartmentController {
             String value = departmentValue.get(i);
             try {
                 switch (attr.toLowerCase()) {
-                    case "dname", "mgr_ssn", "mgr_start_date" -> searchValue.add(value);
+                    case "dname", "mgr_ssn" -> searchValue.add(value);
+                    case "mgr_start_date" -> searchValue.add(value);
                     case "dnumber" -> searchValue.add(Integer.parseInt(value));
                     default -> {
                         return ResponseEntity.badRequest().body("Unknown attribute: " + attr);

@@ -9,6 +9,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +39,7 @@ public class DepartmentDaoImpl implements DepartmentDao{
 
     @Override
     public List<Department> getDepartmentByAttr(List<String> searchAttr, List<Object> departmentValue) {
-        StringBuilder queryBuilder = new StringBuilder("select * from DEPARTMENT where trash = false and ");
+        StringBuilder queryBuilder = new StringBuilder("select * from DEPARTMENT where ");
 
         MapSqlParameterSource params = new MapSqlParameterSource();
 
@@ -96,6 +98,24 @@ public class DepartmentDaoImpl implements DepartmentDao{
     }
 
     @Override
+    public Department restoreDepartmentByDnumber(int dnumber) {
+        String sql = "UPDATE DEPARTMENT SET trash = false WHERE Dnumber = :dnumber AND trash = true";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("dnumber", dnumber);
+
+        try {
+            int result = template.update(sql, params);
+            if (result > 0) {
+                return getDepartmentByDnumber(dnumber);
+            }
+            else return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public Department addDepartment(List<Object> addingValue) {
         if (addingValue.size() != 4) {
             throw new IllegalArgumentException("Invalid changeValue list");
@@ -105,15 +125,15 @@ public class DepartmentDaoImpl implements DepartmentDao{
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("Dname", addingValue.get(0));
-        params.addValue("Dnumber", addingValue.get(1));
+        params.addValue("Dnumber", Integer.parseInt(addingValue.get(1).toString()));
         params.addValue("Mgr_ssn", addingValue.get(2));
-        params.addValue("Mgr_start_date", addingValue.get(3).toString());
+        params.addValue("Mgr_start_date", addingValue.get(3));
         params.addValue("trash", false);
 
         try {
             int result = template.update(sql, params);
             if (result > 0) {
-                return getDepartmentByDnumber(Integer.parseInt(addingValue.get(3).toString()));
+                return getDepartmentByDnumber(Integer.parseInt(addingValue.get(1).toString()));
             }
             else return null;
         } catch (Exception e) {

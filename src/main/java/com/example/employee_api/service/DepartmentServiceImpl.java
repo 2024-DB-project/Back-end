@@ -56,7 +56,7 @@ public class DepartmentServiceImpl implements DepartmentService{
 
     @Override
     public boolean restoreDepartmentByDnumber(int dnumber) {
-        return departmentDao.updateDepartmentByDnumber(dnumber, Map.of("trash", false)) != null;
+        return departmentDao.restoreDepartmentByDnumber(dnumber) != null;
     }
 
     @Override
