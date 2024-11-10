@@ -1,5 +1,8 @@
 package com.example.employee_api.dao;
 
+import com.example.employee_api.exception.ConstraintViolationException;
+import com.example.employee_api.exception.ForeignKeyConstraintViolationException;
+import com.example.employee_api.exception.UniqueConstraintViolationException;
 import com.example.employee_api.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -127,6 +130,16 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 return getEmployeeBySsn(employeeSsn);
             }
             else return null;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            if (e.getMessage().contains("FOREIGN KEY")) {
+                throw new ForeignKeyConstraintViolationException("Foreign key constraint violation: " + e.getMessage());
+            }
+            else if (e.getMessage().contains("UNIQUE")) {
+                throw new UniqueConstraintViolationException("Unique constraint violation: " + e.getMessage());
+            }
+            else {
+                throw new ConstraintViolationException("Constraint violation: " + e.getMessage());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -166,6 +179,16 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 return getEmployeeBySsn(addingValue.get(3).toString());
             }
             else return null;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            if (e.getMessage().contains("FOREIGN KEY")) {
+                throw new ForeignKeyConstraintViolationException("Foreign key constraint violation: " + e.getMessage());
+            }
+            else if (e.getMessage().contains("UNIQUE")) {
+                throw new UniqueConstraintViolationException("Unique constraint violation: " + e.getMessage());
+            }
+            else {
+                throw new ConstraintViolationException("Constraint violation: " + e.getMessage());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return null;

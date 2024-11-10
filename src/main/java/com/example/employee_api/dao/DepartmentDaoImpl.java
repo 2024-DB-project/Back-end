@@ -61,6 +61,7 @@ public class DepartmentDaoImpl implements DepartmentDao{
         String sql = "DELETE FROM DEPARTMENT WHERE dnumber = :dnumber AND trash = true";
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("dnumber", dnumber);
+
         try {
             int result = template.update(sql, params);
             return result > 0;
