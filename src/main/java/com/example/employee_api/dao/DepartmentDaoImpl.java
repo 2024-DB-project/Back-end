@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.Date;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,9 @@ public class DepartmentDaoImpl implements DepartmentDao{
         try {
             int result = template.update(sql, params);
             return result > 0;
-        } catch (Exception e) {
+        }
+
+        catch (Exception e) {
             e.printStackTrace();
             return false;
         }
