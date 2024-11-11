@@ -69,7 +69,7 @@ public class EmployeeController {
                 switch (attr.toLowerCase()) {
                     case "fname", "minit", "lname", "ssn", "bdate", "address", "sex", "super_ssn", "dname" -> searchValue.add(value);
                     case "salary" -> searchValue.add(Double.parseDouble(value));
-                    case "dno" -> searchValue.add(Integer.parseInt(value));
+                    case "trash" -> searchAttr.remove(i--);
                     default -> {
                         return ResponseEntity.badRequest().body("Unknown attribute: " + attr);
                     }
