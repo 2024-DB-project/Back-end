@@ -194,4 +194,38 @@ public class EmployeeDaoImpl implements EmployeeDao {
             return null;
         }
     }
+
+    @Override
+    public List<Map<String, Object>> getGroupAverageSalary(String groupBy) {
+        String sql;
+
+        switch (groupBy.toLowerCase()) {
+            case "sex":
+                sql = "SELECT Sex AS GroupValue, AVG(Salary) AS AvgSalary " +
+                    "FROM EMPLOYEE WHERE trash = false GROUP BY Sex";
+                break;
+            case "department":
+                sql = "SELECT D.Dname AS GroupValue, AVG(E.Salary) AS AvgSalary " +
+                    "FROM EMPLOYEE E " +
+                    "JOIN DEPARTMENT D ON E.Dno = D.Dnumber " +
+                    "WHERE E.trash = false " +
+                    "GROUP BY D.Dname";
+                break;
+            case "supervisor":
+                sql = "SELECT CONCAT(S.Fname, ' ', S.Lname) AS GroupValue, AVG(E.Salary) AS AvgSalary " +
+                    "FROM EMPLOYEE E " +
+                    "LEFT JOIN EMPLOYEE S ON E.Super_ssn = S.Ssn " +
+                    "WHERE E.trash = false " +
+                    "GROUP BY E.Super_ssn";
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid groupBy value: " + groupBy);
+        }
+
+        try {
+            return dbManager.executeQuery(sql);
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching group average salary: " + e.getMessage(), e);
+        }
+    }
 }

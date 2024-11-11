@@ -64,4 +64,9 @@ public class EmployeeServiceImpl implements EmployeeService{
     public Employee addEmployee(List<Object> addingValue) {
         return employeeDao.addEmployee(addingValue);
     }
+
+    @Override
+    public List<Map<String, Object>> getGroupAverageSalary(String groupBy) {
+        return employeeDao.getGroupAverageSalary(groupBy);
+    }
 }
