@@ -13,7 +13,7 @@ public class Employee {
     private String sex;         // Sex
     private double salary;      // Salary
     private String superSsn;    // Supervisor's SSN
-    private int dno;           // Department Number
+    private String dname;           // Department Number
     private Timestamp created;   // Created timestamp
     private Timestamp modified;  // Modified timestamp
 
@@ -23,7 +23,7 @@ public class Employee {
 
     public Employee(String fname, String minit, String lname, String ssn,
                     Date bdate, String address, String sex,
-                    double salary, String superSsn, int dno,
+                    double salary, String superSsn, String dname,
                     Timestamp created, Timestamp modified) {
         this.fname = fname;
         this.minit = minit;
@@ -34,7 +34,7 @@ public class Employee {
         this.sex = sex;
         this.salary = salary;
         this.superSsn = superSsn;
-        this.dno = dno;
+        this.dname = dname;
         this.created = created;
         this.modified = modified;
     }
@@ -112,12 +112,12 @@ public class Employee {
         this.superSsn = superSsn;
     }
 
-    public int getDno() {
-        return dno;
+    public String getDname() {
+        return dname;
     }
 
-    public void setDno(int dno) {
-        this.dno = dno;
+    public void setDname(String dname) {
+        this.dname = dname;
     }
 
     public Timestamp getCreated() {

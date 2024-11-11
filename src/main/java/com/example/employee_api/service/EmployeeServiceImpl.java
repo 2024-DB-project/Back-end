@@ -19,11 +19,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public List<Employee> getAllEmployees() {
-        return employeeDao.getEmployeeByAttr(List.of("trash"), List.of(false));
+        return employeeDao.getEmployeeByAttr(List.of("EMPLOYEE.trash"), List.of(false));
     }
 
     @Override
-    public List<Employee> getAllTrashes() { return employeeDao.getEmployeeByAttr(List.of("trash"), List.of(true)); }
+    public List<Employee> getAllTrashes() { return employeeDao.getEmployeeByAttr(List.of("EMPLOYEE.trash"), List.of(true)); }
 
     @Override
     public Employee getEmployeeBySsn(String employeeSsn) {
@@ -32,7 +32,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public List<Employee> getEmployeeByAttr(List<String> searchAttr, List<Object> employeeValue) {
-        searchAttr.add("trash");
+        searchAttr.add("EMPLOYEE.trash");
         employeeValue.add(false);
         return employeeDao.getEmployeeByAttr(searchAttr, employeeValue);
     }
