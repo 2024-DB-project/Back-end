@@ -67,7 +67,7 @@ public class EmployeeController {
             String value = employeeValue.get(i);
             try {
                 switch (attr.toLowerCase()) {
-                    case "fname", "minit", "lname", "ssn", "bdate", "address", "sex", "super_ssn" -> searchValue.add(value);
+                    case "fname", "minit", "lname", "ssn", "bdate", "address", "sex", "super_ssn", "dname" -> searchValue.add(value);
                     case "salary" -> searchValue.add(Double.parseDouble(value));
                     case "dno" -> searchValue.add(Integer.parseInt(value));
                     default -> {

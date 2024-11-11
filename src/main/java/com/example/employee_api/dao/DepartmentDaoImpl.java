@@ -1,7 +1,11 @@
 package com.example.employee_api.dao;
 
+import com.example.employee_api.exception.ConstraintViolationException;
+import com.example.employee_api.exception.ForeignKeyConstraintViolationException;
+import com.example.employee_api.exception.UniqueConstraintViolationException;
 import com.example.employee_api.model.Department;
 import com.example.employee_api.service.DepartmentService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -10,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.Date;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +70,16 @@ public class DepartmentDaoImpl implements DepartmentDao{
         try {
             int result = template.update(sql, params);
             return result > 0;
+        } catch (DataIntegrityViolationException e) {
+            if (e.getMessage().contains("FOREIGN KEY")) {
+                throw new ForeignKeyConstraintViolationException("Foreign key constraint violation: " + e.getMessage());
+            }
+            else if (e.getMessage().contains("UNIQUE")) {
+                throw new UniqueConstraintViolationException("Unique constraint violation: " + e.getMessage());
+            }
+            else {
+                throw new ConstraintViolationException("Constraint violation: " + e.getMessage());
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -92,6 +107,16 @@ public class DepartmentDaoImpl implements DepartmentDao{
                 return getDepartmentByDnumber(dnumber);
             }
             else return null;
+        } catch (DataIntegrityViolationException e) {
+            if (e.getMessage().contains("FOREIGN KEY")) {
+                throw new ForeignKeyConstraintViolationException("Foreign key constraint violation: " + e.getMessage());
+            }
+            else if (e.getMessage().contains("UNIQUE")) {
+                throw new UniqueConstraintViolationException("Unique constraint violation: " + e.getMessage());
+            }
+            else {
+                throw new ConstraintViolationException("Constraint violation: " + e.getMessage());
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -137,6 +162,16 @@ public class DepartmentDaoImpl implements DepartmentDao{
                 return getDepartmentByDnumber(Integer.parseInt(addingValue.get(1).toString()));
             }
             else return null;
+        } catch (DataIntegrityViolationException e) {
+            if (e.getMessage().contains("FOREIGN KEY")) {
+                throw new ForeignKeyConstraintViolationException("Foreign key constraint violation: " + e.getMessage());
+            }
+            else if (e.getMessage().contains("UNIQUE")) {
+                throw new UniqueConstraintViolationException("Unique constraint violation: " + e.getMessage());
+            }
+            else {
+                throw new ConstraintViolationException("Constraint violation: " + e.getMessage());
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return null;

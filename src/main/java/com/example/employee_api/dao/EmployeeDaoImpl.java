@@ -28,7 +28,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
     public Employee getEmployeeBySsn(String employeeSsn) {
         Employee employee = new Employee();
-        String query = "SELECT * FROM EMPLOYEE WHERE Ssn = ? AND trash = false";
+        String query = "SELECT Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dname, created, modified FROM EMPLOYEE, DEPARTMENT WHERE Dno = Dnumber AND Ssn = ? AND EMPLOYEE.trash = false";
 
         try {
             List<Map<String, Object>> results = dbManager.executeQuery(query, employeeSsn);
@@ -46,7 +46,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.setSex((String) result.get("Sex"));
                 employee.setSalary(((BigDecimal) result.get("Salary")).doubleValue());
                 employee.setSuperSsn((String) result.get("Super_ssn"));
-                employee.setDno((int) result.get("Dno"));
+                employee.setDname((String) result.get("Dname"));
                 employee.setCreated((Timestamp) result.get("created"));
                 employee.setModified((Timestamp) result.get("modified"));
             }
@@ -59,7 +59,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
     public List<Employee> getEmployeeByAttr(List<String> searchAttr, List<Object> employeeValue) {
         List<Employee> employees = new ArrayList<>();
-        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM EMPLOYEE WHERE ");
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM EMPLOYEE, DEPARTMENT WHERE Dno = Dnumber AND ");
         for (int i = 0; i < searchAttr.size(); i++) {
             queryBuilder.append(searchAttr.get(i)).append(" = ?");
             if (i < searchAttr.size() - 1) {
@@ -82,7 +82,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.setSex((String) row.get("Sex"));
                 employee.setSalary(((BigDecimal) row.get("Salary")).doubleValue());
                 employee.setSuperSsn((String) row.get("Super_ssn"));
-                employee.setDno((int) row.get("Dno"));
+                employee.setDname((String) row.get("Dname"));
                 employee.setCreated((Timestamp) row.get("created"));
                 employee.setModified((Timestamp) row.get("modified"));
 
