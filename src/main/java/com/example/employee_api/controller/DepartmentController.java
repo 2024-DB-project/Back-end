@@ -1,5 +1,6 @@
 package com.example.employee_api.controller;
 
+import com.example.employee_api.exception.ConstraintViolationException;
 import com.example.employee_api.model.Department;
 import com.example.employee_api.service.DepartmentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,6 +23,11 @@ public class DepartmentController {
     @Autowired
     public DepartmentController(DepartmentService departmentService) {
         this.departmentService = departmentService;
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     // 01. 모든 부서 조회
