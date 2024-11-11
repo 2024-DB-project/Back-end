@@ -15,4 +15,5 @@ public interface EmployeeService {
     boolean restoreEmployeeBySsn(String employeeSsn);
     Employee updateEmployeeBySsn(String employeeSsn, Map<String, Object> updateValue);
     Employee addEmployee(List<Object> changeValue);
+    List<Map<String, Object>> getGroupAverageSalary(String groupBy);
 }
