@@ -12,4 +12,5 @@ public interface EmployeeDao {
     Employee updateEmployeeBySsn(String employeeSsn, Map<String, Object> employee);
     Employee restoreEmployeeBySsn(String employeeSsn);
     Employee addEmployee(List<Object> addingValue);
+    List<Map<String, Object>> getGroupAverageSalary(String groupBy);
 }

@@ -121,4 +121,17 @@ public class EmployeeController {
         Employee createdEmployee = employeeService.addEmployee(addingValue);
         return ResponseEntity.status(201).body(createdEmployee);
     }
+
+    @Operation(summary = "그룹별 평균 월급 조회", description = "선택된 그룹 기준(성별, 부서, 상급자)으로 평균 월급을 조회합니다.",tags = {"조회(GET)"})
+    @GetMapping("/group-average/{groupBy}")
+    public ResponseEntity<List<Map<String, Object>>> getGroupAverageSalary(@PathVariable("groupBy") String groupBy) {
+        try {
+            List<Map<String, Object>> groupAverage = employeeService.getGroupAverageSalary(groupBy);
+            return ResponseEntity.ok(groupAverage);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null); // 잘못된 groupBy 값 처리
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null); // 기타 오류 처리
+        }
+    }
 }
