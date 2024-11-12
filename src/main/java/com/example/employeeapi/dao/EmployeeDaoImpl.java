@@ -167,7 +167,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
             throw new IllegalArgumentException("Invalid changeValue list");
         }
 
-        String query = "INSERT INTO EMPLOYEE (Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dno, created, modified, trash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, false)";
+        String query = "INSERT INTO EMPLOYEE (Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dno, created, modified, trash) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, false)";
 
         Timestamp currentTimestamp = Timestamp.valueOf(LocalDateTime.now());
         addingValue.add(currentTimestamp);

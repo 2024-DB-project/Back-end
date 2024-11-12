@@ -15,5 +15,8 @@ export SPRING_DATASOURCE_PASSWORD=$SPRING_DATASOURCE_PASSWORD
 echo "Database URL: $SPRING_DATASOURCE_URL"
 echo "Database Username: $SPRING_DATASOURCE_USERNAME"
 
+# Flyway clean 및 migrate 실행
+./mvnw flyway:clean flyway:migrate -Dflyway.url=$SPRING_DATASOURCE_URL -Dflyway.user=$SPRING_DATASOURCE_USERNAME -Dflyway.password=$SPRING_DATASOURCE_PASSWORD -Dflyway.cleanDisabled=false
+
 # Maven clean install 및 run 실행
 ./mvnw clean install spring-boot:run -Dspring.datasource.url=$SPRING_DATASOURCE_URL -Dspring.datasource.username=$SPRING_DATASOURCE_USERNAME -Dspring.datasource.password=$SPRING_DATASOURCE_PASSWORD
