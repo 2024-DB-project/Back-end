@@ -177,7 +177,7 @@ public class DepartmentDaoImpl implements DepartmentDao{
 
     @Override
     public Double getDepartmentInfo(int dnumber, DepartmentService.OperationType operationType) {
-        String sql = "SELECT " + operationType + "(Salary) FROM DEPARTMENT WHERE Dnumber = :dnumber AND EMPLOYEE.trash = false";
+        String sql = "SELECT " + operationType + "(Salary) FROM EMPLOYEE, DEPARTMENT WHERE Dno = Dnumber AND Dnumber = :dnumber AND EMPLOYEE.trash = false";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("dnumber", dnumber);
