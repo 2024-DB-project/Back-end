@@ -197,23 +197,23 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public List<Map<String, Object>> getGroupAverageSalary(String groupBy) {
+    public List<Map<String, Object>> getGroupInfo(String groupBy) {
         String sql;
 
         switch (groupBy.toLowerCase()) {
             case "sex":
-                sql = "SELECT Sex AS GroupValue, AVG(Salary) AS AvgSalary " +
+                sql = "SELECT Sex AS GroupValue, AVG(Salary) AS AvgSalary, MAX(Salary) AS MaxSalary, MIN(Salary) AS MinSalary " +
                     "FROM EMPLOYEE WHERE trash = false GROUP BY Sex";
                 break;
             case "department":
-                sql = "SELECT D.Dname AS GroupValue, AVG(E.Salary) AS AvgSalary " +
+                sql = "SELECT D.Dname AS GroupValue, AVG(E.Salary) AS AvgSalary, MAX(E.Salary) AS MaxSalary, MIN(E.Salary) AS MinSalary " +
                     "FROM EMPLOYEE E " +
                     "JOIN DEPARTMENT D ON E.Dno = D.Dnumber " +
                     "WHERE E.trash = false " +
                     "GROUP BY D.Dname";
                 break;
             case "supervisor":
-                sql = "SELECT CONCAT(S.Fname, ' ', S.Lname) AS GroupValue, AVG(E.Salary) AS AvgSalary " +
+                sql = "SELECT CONCAT(S.Fname, ' ', S.Lname) AS GroupValue, AVG(E.Salary) AS AvgSalary, MAX(E.Salary) AS MaxSalary, MIN(E.Salary) AS MinSalary " +
                     "FROM EMPLOYEE E " +
                     "LEFT JOIN EMPLOYEE S ON E.Super_ssn = S.Ssn " +
                     "WHERE E.trash = false " +
